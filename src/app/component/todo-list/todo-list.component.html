@@ -1,0 +1,79 @@
+<div class="row">
+
+  <div class="col-md-12 bg-light text-right mb-10">
+    <button type="button" class="btn btn-primary" (click)="AddNew()">
+      <i class="bi bi-plus-circle me-1"></i> Add New
+    </button>
+  </div>
+  <div class="card w-100">
+    <div class="card-body">
+      <form [formGroup]="filterForm" (ngSubmit)="filterTasks()" class="row g-3 align-items-center">
+        <div class="col-auto">
+          <label for="title" class="col-form-label">Title:</label>
+          <input type="text" id="title" class="form-control" formControlName="title" />
+        </div>
+
+        <div class="col-auto">
+          <label for="date" class="col-form-label">Date:</label>
+          <input type="date" id="date" class="form-control" formControlName="date" />
+        </div>
+
+        <div class="col-auto">
+          <label for="group" class="col-form-label">Group:</label>
+          <select id="group" class="form-select" formControlName="group">
+            <option value="group1">Group 1</option>
+            <option value="group2">Group 2</option>
+          </select>
+        </div>
+
+        <div class="col-auto">
+          <button type="submit" class="btn btn-primary">Apply Filters</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+
+
+    <div class="button-group d-flex justify-content-end">
+      <button type="button" class="btn btn-danger " [disabled]="!isMultipleSelection()" (click)="deleteSelected()">
+        <i class="bi bi-trash me-1"></i> Delete Selected
+      </button>
+      <button type="button" [disabled]="!isMultipleSelection()" (click)="markAsDone()" class="btn btn-success ">
+        <i class="bi bi-check-lg me-1"></i> Mark as Done
+      </button>
+    </div>
+ 
+
+  <form [formGroup]="taskForm">
+    <div *ngFor="let group of getUniqueGroups()">
+      <h4 class="groupButton">{{ group }}</h4>
+
+      <div *ngFor="let task of getTasksByGroup(group)">
+        <div class="row listBg">
+          <div class="col-md-6">
+            <input type="checkbox" class="form-check-input" (change)="selectTask(task)"
+              formControlName="selectedTasks" />
+            <label class="form-check-label" [routerLink]="['/component/task', task.id]">
+              {{ task.title }} - {{ task.state }} - {{ task.group }}
+            </label>
+          </div>
+          <div class="col-md-6">
+            <div class="d-flex justify-content-end">
+              <button type="button" class="btn btn-danger btn-circle" (click)="deleteTask(task)">
+                <i class="bi bi-trash"></i>
+              </button>
+              <button type="button" class="btn btn-success btn-circle" (click)="markTaskAsDone(task)">
+                <i class="bi bi-check-lg"></i>
+              </button>
+              <!-- <button (click)="markTaskAsDone(task)" class="btn btn-success btn-sm">Mark as Done</button>
+                <button (click)="deleteTask(task)" class="btn btn-danger btn-sm">Delete</button> -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+
+
+</div>
