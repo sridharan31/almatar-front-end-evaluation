@@ -5,9 +5,10 @@ export const ROUTES: RouteInfo[] = [
   {
     path: '/component/task',
     title: 'Today',
-    icon: 'bi bi-bell',
+    icon: 'bi bi-calendar-event',
     class: '',
     extralink: false,
+    filter:"today",
     submenu: []
   },
   {
@@ -16,61 +17,42 @@ export const ROUTES: RouteInfo[] = [
     icon: 'bi bi-patch-check',
     class: '',
     extralink: false,
+    filter:"",
     submenu: []
   },
   {
-    path: '/component/buttons',
+    path: '/component/task',
     title: 'Week',
-    icon: 'bi bi-hdd-stack',
+    icon: 'bi bi-calendar-check',
     class: '',
     extralink: false,
+    filter:"Week",
     submenu: []
   },
   {
-    path: '/component/task:id',
-    title: 'Done',
-    icon: 'bi bi-card-text',
+    path: '/component/task',
+    title: 'All',
+    icon: 'bi bi-list-task',
     class: '',
     extralink: false,
+    filter:"all",
+    submenu: []
+  },
+  {
+    path: '/component/task',
+    title: 'Done',
+    icon: 'bi bi-check2-circle',
+    class: '',
+    extralink: false,
+    filter:"done",
     submenu: []
   },
   {
     path: '/component/dropdown',
     title: 'Deleted',
-    icon: 'bi bi-menu-app',
+    icon: 'bi bi-trash',
     class: '',
-    extralink: false,
-    submenu: []
-  },
-  {
-    path: '/component/pagination',
-    title: 'Group',
-    icon: 'bi bi-dice-1',
-    class: '',
-    extralink: false,
-    submenu: []
-  },
-  {
-    path: '/component/nav',
-    title: 'Nav',
-    icon: 'bi bi-pause-btn',
-    class: '',
-    extralink: false,
-    submenu: []
-  },
-  {
-    path: '/component/table',
-    title: 'Table',
-    icon: 'bi bi-layout-split',
-    class: '',
-    extralink: false,
-    submenu: []
-  },
-  {
-    path: '/about',
-    title: 'About',
-    icon: 'bi bi-people',
-    class: '',
+    filter:"",
     extralink: false,
     submenu: []
   }

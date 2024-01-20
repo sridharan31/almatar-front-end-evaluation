@@ -30,8 +30,10 @@ export class SidebarComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute
   ) {}
+  navigateWithFilter(path: string, filterValue: string): void {
+    this.router.navigate([path], { queryParams: { filter: filterValue } });
+  }
 
-  // End open close
   ngOnInit() {
     this.sidebarnavItems = ROUTES.filter(sidebarnavItem => sidebarnavItem);
   }

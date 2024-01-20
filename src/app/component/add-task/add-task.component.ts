@@ -18,7 +18,7 @@ export class addTaskComponent {
       deliveryDate: ['', Validators.required],
       group: ['', Validators.required],
     });
-  }
+      }
 
   clearForm(): void {
     this.taskForm.reset();
@@ -28,9 +28,8 @@ export class addTaskComponent {
 
   addTask(): void {
     if (this.taskForm.valid) {
-        // Create a new task using the form data
         const newTask: Task = {
-          id: this.generateNewId(), // You need to implement generateNewId() method
+          id: this.generateNewId(),
           title: this.taskForm.controls['title'].value,
           description: this.taskForm.controls['description'].value,
           priority: this.taskForm.controls['priority'].value,
@@ -39,10 +38,7 @@ export class addTaskComponent {
           state: 'Pending',
           deleted: false,
         };
-    
-        // Add the new task to the task service
         this.taskService.addTask(newTask);
-      // // You can add logic to save the task to the backend here
       // this.taskService.addTask(newTask);
       this.clearForm();
     }

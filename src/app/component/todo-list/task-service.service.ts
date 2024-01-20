@@ -24,17 +24,27 @@ export class TaskService {
     //   deleted: false,
     // },
   ];
+  constructor() {
+    this.loadTasksFromLocalStorage();
+  }
+  private loadTasksFromLocalStorage(): void {
+    const storedTasks = localStorage.getItem('tasks');
+    this.tasks = storedTasks ? JSON.parse(storedTasks) : [];
+  }
   getTasks(): Observable<Task[]> {
     const filteredTasks = this.tasks.filter((task) => !task.deleted);
     return of(filteredTasks);
   }
+  private saveTasksToLocalStorage(): void {
+    localStorage.setItem('tasks', JSON.stringify(this.tasks));
+  }
 
-  // Other methods for CRUD operations
 
   addTask(newTask: Task): void {
     // For simplicity, we are not assigning a real ID or handling backend logic here
     newTask.id = this.tasks.length + 1;
     this.tasks.push(newTask);
+    this.saveTasksToLocalStorage();
     console.log(this.tasks)
   }
   markTaskAsDone(taskId: number): void {
@@ -42,6 +52,7 @@ export class TaskService {
     if (taskIndex !== -1) {
       this.tasks[taskIndex].state = 'Done';
     }
+    this.saveTasksToLocalStorage();
   }
   deleteTasks(taskIds: number[]): void {
     this.tasks = this.tasks.filter((task) => !taskIds.includes(task.id));
@@ -56,5 +67,6 @@ export class TaskService {
         task.state = newStatus;
       }
     });
+    this.saveTasksToLocalStorage();
   }
 }

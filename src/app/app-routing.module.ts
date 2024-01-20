@@ -25,6 +25,6 @@ export const Approutes: Routes = [
   },
   {
     path: '**',
-    redirectTo: '/component/alert'
+    redirectTo: '/component/task'
   }
 ];

@@ -4,7 +4,7 @@ import { NgFor, NgIf } from '@angular/common';
 import { Task } from './task.model';
 import { TaskService } from './task-service.service';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 // import { startOfDay, endOfDay, isToday, startOfWeek, endOfWeek, isAfter } from 'date-fns';
 @Component({
   selector: 'app-ngbd-alert',
@@ -21,7 +21,7 @@ export class NgbdAlertBasicComponent {
   isDoneButtonDisabled = true;
   taskForm: FormGroup;
   filterForm: FormGroup;
-  constructor(private fb: FormBuilder, private taskService: TaskService, private router: Router) {
+  constructor(private fb: FormBuilder, private taskService: TaskService, private router: Router, private route: ActivatedRoute) {
     this.taskForm = this.fb.group({
       selectedTasks: new FormControl(null),
     });
@@ -29,12 +29,54 @@ export class NgbdAlertBasicComponent {
       title: [''],
       date: [''],
       group: [''],
+      today: [false],
+      Week: [false],
+      all: [false],
+      done: [false],
     });
   }
-
   ngOnInit(): void {
-    this.loadTasks();
+    this.route.queryParams.subscribe((queryParams) => {
+      const filter = queryParams['filter'];
+      this.filterForm.patchValue({
+        today: false,
+        Week: false,
+        all: false,
+        done: false,
+      });
+      if (filter === 'today' || filter === 'Week' || filter === 'all' || filter === 'done') {
+        this.filterForm.patchValue({ [filter]: true });
+      }
+// console.log(filter)
+//       if (filter === 'today') {
+//         this.filterForm.patchValue({ today: true });
+//         this.filterForm.patchValue({ thisWeek: false });
+//         this.filterForm.patchValue({ all: false });
+//         this.filterForm.patchValue({ done: false });
+//       } else if (filter === 'Week') {
+//         this.filterForm.patchValue({ today: false });
+//         this.filterForm.patchValue({ thisWeek: true });
+//         this.filterForm.patchValue({ all: false });
+//         this.filterForm.patchValue({ done: false });
+//       } else if (filter === 'all') {
+//         this.filterForm.patchValue({ today: false });
+//         this.filterForm.patchValue({ thisWeek: false });
+//         this.filterForm.patchValue({ all: true });
+//         this.filterForm.patchValue({ done: false });
+//       } else if (filter === 'done') {
+//         this.filterForm.patchValue({ today: false });
+//         this.filterForm.patchValue({ thisWeek: false });
+//         this.filterForm.patchValue({ all: false });
+//         this.filterForm.patchValue({ done: true });
+//       }else  {
+//         this.filterForm.patchValue({ today: false });
+//         this.filterForm.patchValue({ thisWeek: false });
+//         this.filterForm.patchValue({ all: false });
+//         this.filterForm.patchValue({ done: false });
+//       }
 
+      this.loadTasks();
+    });
   }
 
   loadTasks(): void {
@@ -95,41 +137,48 @@ export class NgbdAlertBasicComponent {
     this.taskService.updateTaskStatus([task.id], 'Pending');
   }
 
-  filterTasks(): void {
-    const filters = this.filterForm.value;
-    this.filteredTasks = this.tasks.filter((task) => {
-      return (
-        task.title.toLowerCase().includes(filters.title.toLowerCase()) &&
-        (!filters.date || new Date(task?.deliveryDate).toDateString() === new Date(filters.date).toDateString()) &&
-        (!filters.group || task.group === filters.group)
-      );
-    });
-  }
-
   // filterTasks(): void {
-  //   const filters = this.taskForm.value;
-
+  //   const filters = this.filterForm.value;
   //   this.filteredTasks = this.tasks.filter((task) => {
   //     return (
   //       task.title.toLowerCase().includes(filters.title.toLowerCase()) &&
-  //       (!filters.date || new Date(task.date).toDateString() === new Date(filters.date).toDateString()) &&
-  //       (!filters.group || task.group === filters.group) &&
-  //       (filters.today || this.isToday(new Date(task.date))) &&
-  //       (filters.thisWeek || this.isThisWeek(new Date(task.date)))
+  //       (!filters.date || new Date(task?.deliveryDate).toDateString() === new Date(filters.date).toDateString()) &&
+  //       (!filters.group || task.group === filters.group)
   //     );
   //   });
   // }
 
+  filterTasks(): void {
+    const filters = this.filterForm.value;
+
+    this.filteredTasks = this.tasks.filter((task) => {
+      return (
+        task.title.toLowerCase().includes(filters.title.toLowerCase()) &&
+        (!filters.date || new Date(task.deliveryDate).toDateString() === new Date(filters.date).toDateString()) &&
+        (!filters.group || task.group === filters.group) &&
+        (!filters.today || this.isToday(new Date(task.deliveryDate))) &&
+        (!filters.Week || this.isThisWeek(new Date(task.deliveryDate))) &&
+        (!filters.all || true) &&
+        (!filters.done || task.state === 'Done')
+      );
+    });
+    console.log(this.filteredTasks)
+  }
+
   isToday(date: Date): boolean {
     const today = new Date();
+    console.log(date.toDateString() === today.toDateString())
     return date.toDateString() === today.toDateString();
   }
 
   isThisWeek(date: Date): boolean {
     const today = new Date();
+    const startOfWeek = new Date(today);
+    startOfWeek.setDate(today.getDate() - today.getDay());
     const endOfWeek = new Date(today);
-    endOfWeek.setDate(today.getDate() + 6 - today.getDay());
-    return date >= today && date <= endOfWeek;
+    endOfWeek.setDate(today.getDate() + (6 - today.getDay()));
+console.log(date >= startOfWeek && date <= endOfWeek)
+    return date >= startOfWeek && date <= endOfWeek;
   }
 }
 
