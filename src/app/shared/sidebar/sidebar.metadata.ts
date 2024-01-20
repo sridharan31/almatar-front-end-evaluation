@@ -7,4 +7,5 @@ export interface RouteInfo {
   extralink: boolean;
   submenu: RouteInfo[];
   filter:string;
+  expanded?: boolean;
 }

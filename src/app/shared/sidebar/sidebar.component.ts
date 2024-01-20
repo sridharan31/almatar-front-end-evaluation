@@ -17,21 +17,28 @@ export class SidebarComponent implements OnInit {
   showSubMenu = '';
   public sidebarnavItems:RouteInfo[]=[];
   // this is for the open close
-  addExpandClass(element: string) {
-    if (element === this.showMenu) {
-      this.showMenu = '0';
-    } else {
-      this.showMenu = element;
-    }
-  }
+
 
   constructor(
     private modalService: NgbModal,
     private router: Router,
     private route: ActivatedRoute
   ) {}
+
+  onMenuClick(menuItem: RouteInfo): void {
+    if (menuItem.submenu.length > 0) {
+      menuItem.expanded = !menuItem.expanded;
+    } else {
+      this.showMenu = menuItem.title;
+    }
+  }
   navigateWithFilter(path: string, filterValue: string): void {
-    this.router.navigate([path], { queryParams: { filter: filterValue } });
+    if(filterValue){
+      this.router.navigate([path], { queryParams: { filter: filterValue } });
+    } else {
+      this.router.navigate([path]);
+    }
+    
   }
 
   ngOnInit() {

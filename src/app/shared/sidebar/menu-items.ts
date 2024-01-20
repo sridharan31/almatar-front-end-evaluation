@@ -1,14 +1,14 @@
 import { RouteInfo } from './sidebar.metadata';
 
 export const ROUTES: RouteInfo[] = [
- 
+
   {
     path: '/component/task',
     title: 'Today',
     icon: 'bi bi-calendar-event',
     class: '',
     extralink: false,
-    filter:"today",
+    filter: "today",
     submenu: []
   },
   {
@@ -17,7 +17,7 @@ export const ROUTES: RouteInfo[] = [
     icon: 'bi bi-patch-check',
     class: '',
     extralink: false,
-    filter:"",
+    filter: "",
     submenu: []
   },
   {
@@ -26,7 +26,7 @@ export const ROUTES: RouteInfo[] = [
     icon: 'bi bi-calendar-check',
     class: '',
     extralink: false,
-    filter:"Week",
+    filter: "Week",
     submenu: []
   },
   {
@@ -35,7 +35,7 @@ export const ROUTES: RouteInfo[] = [
     icon: 'bi bi-list-task',
     class: '',
     extralink: false,
-    filter:"all",
+    filter: "all",
     submenu: []
   },
   {
@@ -44,16 +44,25 @@ export const ROUTES: RouteInfo[] = [
     icon: 'bi bi-check2-circle',
     class: '',
     extralink: false,
-    filter:"done",
+    filter: "done",
     submenu: []
   },
   {
-    path: '/component/dropdown',
-    title: 'Deleted',
-    icon: 'bi bi-trash',
+    path: '/component/task',
+    title: 'Groups',
+    icon: 'bi bi-folder2',
     class: '',
-    filter:"",
+    filter: "",
     extralink: false,
-    submenu: []
+    submenu: [{
+      path: '/component/task',
+      title: 'Groups 1',
+      icon: 'bi bi-trash',
+      class: 'submenu',
+      filter: "group1",
+      extralink: false,
+      submenu: []
+    }
+    ]
   }
 ];
